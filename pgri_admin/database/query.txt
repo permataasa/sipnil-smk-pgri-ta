@@ -1,0 +1,26 @@
+Membuat Database
+CREATE DATABASE smk_pgri11;
+
+Membuat Table Admin
+CREATE TABLE admin(id_admin CHAR(15) PRIMARY KEY, nama_depan VARCHAR(100), nama_belakang VARCHAR(100), tempat VARCHAR(50), tgl_lahir DATE, jenis_kelamin ENUM('L','P'), alamat VARCHAR(500), password CHAR(15), level_admin ENUM('Super Admin','Admin'));
+
+Membuat Table Guru
+CREATE TABLE guru(kode_guru CHAR(3) PRIMARY KEY, nuptk CHAR(30), nama_depan VARCHAR(100), nama_belakang VARCHAR(100), tempat VARCHAR(50), tgl_lahir DATE, jenis_kelamin ENUM('L','P'), alamat VARCHAR(500), password CHAR(15));
+
+Membuat Table Siswa
+CREATE TABLE siswa(nis CHAR(15) PRIMARY KEY, nama_depan VARCHAR(100), nama_belakang VARCHAR(100), tempat VARCHAR(50), tgl_lahir DATE, nama_ortu VARCHAR(50), jenis_kelamin ENUM('L','P'), agama ENUM('Islam','Protestan','Katolik','Hindu','Budha'), alamat VARCHAR(500), password CHAR(15), kode_kelas CHAR(8), kode_jurusan CHAR(15), tahun_ajaran CHAR(15), FOREIGN KEY(kode_kelas) REFERENCES kelas(kode_kelas) ON DELETE SET NULL ON UPDATE CASCADE, FOREIGN KEY(kode_jurusan) REFERENCES jurusan(kode_jurusan) ON DELETE SET NULL ON UPDATE CASCADE);
+
+Membuat Table Jurusan
+CREATE TABLE jurusan(kode_jurusan char(15) PRIMARY KEY, jurusan VARCHAR(50));
+
+Membuat Table Kelas
+CREATE TABLE kelas(kode_kelas CHAR(8) PRIMARY KEY, tingkat CHAR(3), kelas CHAR(7), kode_guru CHAR(3), FOREIGN KEY (kode_guru) REFERENCES guru(kode_guru) ON DELETE SET NULL ON UPDATE CASCADE);
+
+Membuat Table Pelajaran
+CREATE TABLE pelajaran (kode_pelajaran CHAR(5) PRIMARY KEY, pelajaran VARCHAR(50), kkm int);
+
+Membuat Table Header Nilai
+CREATE TABLE header_nilai(id_nilai CHAR(50) PRIMARY KEY, kode_kelas CHAR(8), kode_jurusan CHAR(15), kode_guru CHAR(3), kode_pelajaran CHAR(5), keterangan_nilai CHAR(15), semester CHAR(1), tahun_ajaran CHAR(15), FOREIGN KEY(kode_kelas) REFERENCES kelas(kode_kelas) ON DELETE SET NULL ON UPDATE CASCADE, FOREIGN KEY(kode_jurusan) REFERENCES jurusan(kode_jurusan) ON DELETE SET NULL ON UPDATE CASCADE, FOREIGN KEY(kode_guru) REFERENCES guru(kode_guru) ON DELETE SET NULL ON UPDATE CASCADE, FOREIGN KEY(kode_pelajaran) REFERENCES pelajaran(kode_pelajaran) ON DELETE SET NULL ON UPDATE CASCADE);
+
+Membuat Table Detail Nilai
+CREATE TABLE detail_nilai(id_nilai char(50), nis CHAR(15), nilai INT, FOREIGN KEY(id_nilai) REFERENCES header_nilai(id_nilai) ON UPDATE CASCADE, FOREIGN KEY(nis) REFERENCES siswa(nis) ON DELETE CASCADE ON UPDATE CASCADE);
